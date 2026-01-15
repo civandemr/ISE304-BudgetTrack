@@ -17,12 +17,15 @@
       <div class="col-md-6">
         <ul class="list-group">
           <li
-            v-for="(amount, category) in categorySummary"
-            :key="category"
+            v-for="item in summaryData"
+            :key="item._id"
             class="list-group-item d-flex justify-content-between align-items-center"
           >
-            {{ category }}
-            <span class="badge bg-primary rounded-pill">{{ amount }} TL</span>
+            {{ item._id }} <span class="badge bg-primary rounded-pill">{{ item.totalAmount }} TL</span>
+          </li>
+          
+          <li v-if="summaryData.length === 0" class="list-group-item text-muted">
+            No expenses found yet.
           </li>
         </ul>
       </div>
@@ -31,27 +34,20 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { getSummary } from '../services/ApiService'
 
-const props = defineProps({
-  expenses: {
-    type: Array,
-    default: () => []
+const summaryData = ref([])
+
+onMounted(async () => {
+  try {
+    summaryData.value = await getSummary()
+  } catch (error) {
+    console.error('Dashboard verisi cekilemedi:', error)
   }
 })
 
 const totalAmount = computed(() => {
-  return props.expenses.reduce((sum, item) => sum + item.amount, 0)
-})
-
-const categorySummary = computed(() => {
-  const summary = {}
-  props.expenses.forEach((item) => {
-    if (!summary[item.category]) {
-      summary[item.category] = 0
-    }
-    summary[item.category] += item.amount
-  })
-  return summary
+  return summaryData.value.reduce((sum, item) => sum + item.totalAmount, 0)
 })
 </script>

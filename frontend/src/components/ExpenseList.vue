@@ -13,7 +13,7 @@
       </thead>
       <tbody>
         <tr v-for="expense in expenses" :key="expense._id">
-          <td>{{ expense.date }}</td>
+          <td>{{ formatDate(expense.date) }}</td>
           <td>{{ expense.title }}</td>
           <td><span class="badge bg-secondary">{{ expense.category }}</span></td>
           <td class="fw-bold">{{ expense.amount }} TL</td>
@@ -40,4 +40,23 @@ defineProps({
 })
 
 defineEmits(['delete-expense'])
+
+const formatDate = (value) => {
+  if (!value) return ''
+
+  if (typeof value === 'string') {
+    const datePart = value.split('T')[0]
+    const [year, month, day] = datePart.split('-')
+    if (year && month && day) {
+      return `${day}.${month}.${year}`
+    }
+  }
+
+  const parsed = new Date(value)
+  if (Number.isNaN(parsed.getTime())) {
+    return String(value)
+  }
+
+  return parsed.toLocaleDateString('tr-TR')
+}
 </script>

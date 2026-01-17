@@ -17,12 +17,25 @@
           <td>{{ expense.title }}</td>
           <td><span class="badge bg-secondary">{{ expense.category }}</span></td>
           <td class="fw-bold">{{ expense.amount }} TL</td>
-          <td>
-            <button @click="$emit('delete-expense', expense._id)" class="btn btn-sm btn-danger">
+          <td class="d-flex gap-2">
+            <button
+              @click="$emit('edit-expense', expense)"
+              class="btn btn-sm btn-warning"
+              title="Edit"
+            >
+              Edit
+            </button>
+
+            <button
+              @click="$emit('delete-expense', expense._id)"
+              class="btn btn-sm btn-danger"
+              title="Delete"
+            >
               X
             </button>
           </td>
         </tr>
+
         <tr v-if="expenses.length === 0">
           <td colspan="5" class="text-center text-muted">No expenses added yet.</td>
         </tr>
@@ -39,7 +52,7 @@ defineProps({
   }
 })
 
-defineEmits(['delete-expense'])
+defineEmits(['delete-expense', 'edit-expense'])
 
 const formatDate = (value) => {
   if (!value) return ''

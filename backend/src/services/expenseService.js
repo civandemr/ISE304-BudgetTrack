@@ -23,6 +23,17 @@ class ExpenseService {
   async getExpenseSummary() {
     return await expenseRepository.getSummary();
   }
+
+  async updateExpense(id, data) {
+    if (!data.amount || data.amount <= 0) {
+      throw new Error('Amount must be a positive number.');
+    }
+    if (!data.title) {
+      throw new Error('Title is required.');
+    }
+
+    return await expenseRepository.updateById(id, data);
+  }
 }
 
 module.exports = new ExpenseService();

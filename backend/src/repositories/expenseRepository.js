@@ -24,6 +24,13 @@ class ExpenseRepository {
       }
     ]);
   }
+
+  async updateById(id, data) {
+    return await Expense.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true
+    });
+  }
 }
 
 module.exports = new ExpenseRepository();

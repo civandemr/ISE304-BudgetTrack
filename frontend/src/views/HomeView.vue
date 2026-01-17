@@ -40,12 +40,15 @@
     </div>
   </div>
 
+  <Teleport to="body">
   <EditExpenseModal
     v-if="showEditModal && selectedExpense"
     :expense="selectedExpense"
     @close="closeEdit"
     @save="saveEdit"
   />
+  </Teleport>
+
 </template>
 
 <script setup>
@@ -119,15 +122,18 @@ const filteredExpenses = computed(() => {
   })
 })
 
-const openEdit = (expense) => {
-  selectedExpense.value = { ...expense }
-  showEditModal.value = true
-}
 
 const closeEdit = () => {
   showEditModal.value = false
   selectedExpense.value = null
 }
+
+const openEdit = (expense) => {
+  selectedExpense.value = { ...expense }
+  showEditModal.value = true
+}
+
+
 
 const saveEdit = async (updated) => {
   try {

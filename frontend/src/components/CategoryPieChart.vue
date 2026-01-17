@@ -25,14 +25,25 @@ const props = defineProps({
   }
 })
 
+// Generate distinct colors automatically
+const makeColors = (n) =>
+  Array.from({ length: n }, (_, i) => `hsl(${Math.round((360 * i) / n)}, 70%, 55%)`)
+
 const chartData = computed(() => {
   if (!props.summaryData.length) return null
 
+  const labels = props.summaryData.map(i => i._id)
+  const data = props.summaryData.map(i => i.totalAmount)
+  const colors = makeColors(labels.length)
+
   return {
-    labels: props.summaryData.map(i => i._id),
+    labels,
     datasets: [
       {
-        data: props.summaryData.map(i => i.totalAmount)
+        data,
+        backgroundColor: colors,
+        borderColor: '#ffffff',
+        borderWidth: 2
       }
     ]
   }
